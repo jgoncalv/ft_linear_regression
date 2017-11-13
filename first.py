@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 
 def parse(s):
@@ -12,11 +13,11 @@ def parse(s):
 	return t0, t1
 
 def main():
-	fileName = "theta.txt"
+	fileNameToRead = "theta.txt"
 	t0 = 0
 	t1 = 0
 	try:
-		with open(fileName, 'r') as f:
+		with open(fileNameToRead, 'r') as f:
 			s = f.readline()
 		t0, t1 = parse(s)
 	except Exception as e:
