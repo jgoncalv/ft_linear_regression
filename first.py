@@ -1,34 +1,38 @@
 #!/usr/bin/python3
 import sys
+import pandas as pd
 
-def parse(s):
-	tab = s.partition(',')
-	if not tab[1]:
-		exit("Error: It seems you don't have correctly formated value in theta.txt . t0,t1.")
-	try:
-		t0 = float(tab[0])
-		t1 = float(tab[2])
-	except Exception as e:
-		exit("Error: {}".format(e))
-	return t0, t1
+
 
 def main():
-	fileNameToRead = "theta.txt"
+	data = []
 	t0 = 0
 	t1 = 0
 	try:
-		with open(fileNameToRead, 'r') as f:
-			s = f.readline()
-		t0, t1 = parse(s)
+		data = pd.read_csv("data.csv", dtype = "float")
 	except Exception as e:
-		print("Error: {}\nSo we use t0 = 0 and t1 = 0\n".format(e))
+		exit(e)
+
+	try:
+		theta = pd.read_csv("theta.csv")
+		t0 = float(theta.t0)
+		t1 = float(theta.t1)
+	except:
+		t0 = 0
+		t1 = 0
+
 	mileage = input("Please enter a mileage :\n")
 	try:
 		mileage = float(mileage)
+		mileage = (mileage - min(data.km)) / (max(data.km) - min(data.km))
 	except Exception as e:
-		exit("Error: {}".format(e))
+		exit(e)
+
 	print("Estimate price :")
-	print(t0 + (t1 * mileage))
+	price = t1 * mileage + t0
+	price = price * (max(data.price) - min(data.price)) + min(data.price)
+	print(price)
+
 
 if __name__ == '__main__':
 	main()
